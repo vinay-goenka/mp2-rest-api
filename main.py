@@ -93,12 +93,11 @@ def get_dataset(dataset_id: int, limit: int = Query(default=100, ge=1)):
 )
 def process_dataset(dataset_id: int, config: ProcessConfig):
     """Validate and process a stored dataset using MP1 functions."""
-    # TODO: retrieve, validate, process, report, update, and return.
     df = storage.get(dataset_id)
     if df is None:
         logger.warning(f"Dataset not found: {dataset_id}")
         raise HTTPException(
-            status_code=400,
+            status_code=404,
             detail=f"Dataset not found: {dataset_id}",
         )
     config_dict = config.model_dump()
@@ -117,7 +116,7 @@ def process_dataset(dataset_id: int, config: ProcessConfig):
         rows_before_val = len(df)
         df_valid = validate_dataframe(df, required_columns, numeric_columns)
         rows_after_val = len(df_valid)
-        val_rows_removed = rows_before_val - rows_after_val
+        validation_rows_removed = rows_before_val - rows_after_val
         df_before = df_valid.copy()
         df_clean = process_data(df_valid, config_dict)
     except ValueError as e:
@@ -132,12 +131,12 @@ def process_dataset(dataset_id: int, config: ProcessConfig):
 
     logger.info(
         f"Processed dataset: id={dataset_id}, "
-        f"validation_removed={val_rows_removed}, "
-        f"f"rows_before={report['rows_before']}, rows_after={report['rows_after']}"
+        f"validation_removed={validation_rows_removed}, "
+        f"rows_before={report['rows_before']}, rows_after={report['rows_after']}"
     )
     response = {
         "id": dataset_id,
-        "val_rows_removed": val_rows_removed,
+        "validation_rows_removed": validation_rows_removed,
         "cleaning_report": report,
     }
     return response
