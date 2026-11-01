@@ -1,0 +1,3 @@
+# MP2 REST API
+
+This FastAPI app takes the MP1 data-cleaning pipeline, which is the previous project I worked on, and makes it available over the web. Uploading a CSV file stores it and returns an ID, which can then be used to view the data or to clean it. Cleaning settings are sent as JSON and can remove duplicates, missing values, and outliers, using the same modules built in MP1. A health check confirms the API is running, and every request is logged with its own ID and response time, which makes debugging much easier. Tests written with pytest check that uploading, processing, and retrieving all work as expected. To try it out, run `python -m uvicorn main:app --reload` and open `/docs` in a browser.
