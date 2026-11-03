@@ -16,7 +16,7 @@ class DatasetStorage:
             "filename": filename,
         }
         no_of_rows = len(df)
-        logger.debug(f"Dataset: id:{dataset_id}, rows:{no_of_rows}")
+        logger.debug(f"Stored dataset: id:{dataset_id}, rows:{no_of_rows}")
         return dataset_id
 
     def get(self, dataset_id):
@@ -27,7 +27,7 @@ class DatasetStorage:
     
         df = self._store[dataset_id]["data"].copy()
         no_of_rows = len(df)
-        logger.debug(f"Dataset: id:{dataset_id}, rows:{no_of_rows}")
+        logger.debug(f"Retrieved dataset: id:{dataset_id}, rows:{no_of_rows}")
         return df
 
     def get_metadata(self, dataset_id):
